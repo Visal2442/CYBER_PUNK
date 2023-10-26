@@ -41,29 +41,16 @@
           </v-row>
         </div>
         <v-container fluid class="ml-md-9">
-          <v-row class="mr-md-10" v-if="isFound">
+          <v-row class="mr-md-10" v-if="isFound & !loading">
             <v-col md="3" v-for="(property, i) of properties" :key="i">
-              <Suspense>
-                <template #default>
-                  <house-card
-                    :property="property"
-                    @rateStar="rateStar"
-                    @alert="alert"
-                  ></house-card>
-                </template>
-                <template #fallback>
-                  <h1>Loading.....</h1>
-                </template>
-              </Suspense>
-              <!-- <v-skeleton-loader type="card, button" :loading="loading"> -->
-              <!-- <house-card
+              <house-card
                   :property="property"
                   @rateStar="rateStar"
                   @alert="alert"
-                ></house-card> -->
-              <!-- </v-skeleton-loader> -->
+                ></house-card>
             </v-col>
           </v-row>
+            <TheLoader v-else-if="loading"></TheLoader>
           <v-row v-else>
             <v-col
               class="text-center d-flex flex-column justify-center align-center"

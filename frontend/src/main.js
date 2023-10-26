@@ -8,6 +8,8 @@ import mixins from "./mixins";
 
 import TheNavbar from "./components/partials/TheNavbar.vue";
 import TheDashboardHeader from "./components/partials/TheDashboardHeader.vue";
+import TheLoader from './components/common/TheLoader.vue'
+
 
 // Pinia
 import { createPinia } from "pinia";
@@ -23,8 +25,9 @@ const app = createApp(App);
 app.use(vuetify);
 app.mixin({ ...mixins });
 app.component("TheNavbar", TheNavbar),
-  app.component("DashboardHeader", TheDashboardHeader),
-  app.use(router);
+app.component("DashboardHeader", TheDashboardHeader),
+app.component("TheLoader", TheLoader),
+app.use(router);
 app.use(pinia);
 // app.use(vue3GoogleLogin, {
 //   clientId: CLIENT_ID

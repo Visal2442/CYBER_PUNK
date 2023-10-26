@@ -197,8 +197,8 @@ export default {
       // Marker Icon
       iconSize: 50,
       homeIcon: HomeIcon,
-      markerLat: this.center[0],
-      markerLng: this.center[1],
+      markerLat: 0,
+      markerLng: 0,
       userId: parseInt(localStorage.getItem("user_id")),
       nameHouse: null,
       size: null,
@@ -287,6 +287,8 @@ export default {
   },
   mounted() {
     this.fetchDistricts();
+    this.markerLat = this.center[0];
+    this.markerLng = this.center[1];
   },
 };
 </script>
