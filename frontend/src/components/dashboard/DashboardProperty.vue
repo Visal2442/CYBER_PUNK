@@ -79,7 +79,7 @@
     </v-container>
 
     <!-- Edit dialog  -->
-    <v-dialog v-model="dialog">
+    <!-- <v-dialog v-model="dialog">
       <v-card>
         <v-sheet class="m-10 w-100 bg-white pa-8" elevation="4">
           <v-card-title
@@ -218,7 +218,7 @@
           </v-form>
         </v-sheet>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
 
     <!-- Delete dialog  -->
     <v-dialog v-model="deleteDialog" width="25%">
@@ -264,7 +264,7 @@ export default {
   data() {
     return {
       role: Cookies.get("role"),
-      dialog: false,
+      // dialog: false,
       deleteDialog: false,
       houseName: "",
       size: "",
