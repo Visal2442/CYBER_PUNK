@@ -17,121 +17,142 @@ import PostPropertyView from "../views/landlord/PostPropertyView.vue";
 import DashboardPropertyView from "@/views/landlord/DashboardPropertyView.vue";
 import ContactUsView from "../views/customer/ContactUsView.vue";
 import UserView from "../views/admin/UserView.vue";
+import DashboardLayout from "../components/dashboard/DashboardLayout.vue";
+// import AppVue from "@/App.vue";
 
 // AuthStore Pinia
 import { useAuthStore } from "../store/AuthStore";
 import { storeToRefs } from "pinia";
 
 const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: HomeView,
-    meta: { title: "Home" },
-  },
-  {
-    path: "/about",
-    name: "About",
-    component: AboutView,
-    meta: { title: "About-Us" },
-  },
-  {
-    path: "/register",
-    name: "Register",
-    component: RegisterView,
-    meta: { title: "Register" },
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: LoginView,
-    meta: { title: "Login" },
-  },
-  {
-    path: "/map",
-    name: "Map",
-    component: MapView,
-    meta: { title: "Map" },
-  },
-  {
-    path: "/property",
-    name: "property",
-    component: PropertyView,
-    meta: { title: "Properties" },
-  },
-  {
-    path: "/detail/:id",
-    name: "Detail",
-    component: DetailView,
-    meta: { title: "Property-Detail" },
-  },
-  {
-    path: "/wishlist",
-    name: "Wishlist",
-    component: WishlistView,
-    meta: { title: "Wishlist" },
-  },
-  {
-    path: "/contact",
-    name: "Contact",
-    component: ContactUsView,
-    meta: { title: "Contact-Us" },
-  },
-  {
-    path: "/email",
-    name: "Email",
-    component: EmailView,
-    meta: { title: "Email" },
-  },
-  {
-    path: "/code",
-    name: "Code",
-    component: CodeView,
-    meta: { title: "Code" },
-  },
-  {
-    path: "/booking",
-    name: "Booking",
-    component: BookingView,
-    meta: { title: "Booking" },
-  },
+    {
+      path: "/",
+      name: "Home",
+      component: HomeView,
+      meta: { title: "Home" },
+    },
+    {
+      path: "/about",
+      name: "About",
+      component: AboutView,
+      meta: { title: "About-Us" },
+    },
+    {
+      path: "/register",
+      name: "Register",
+      component: RegisterView,
+      meta: { title: "Register" },
+    },
+    {
+      path: "/login",
+      name: "Login",
+      component: LoginView,
+      meta: { title: "Login" },
+    },
+    {
+      path: "/map",
+      name: "Map",
+      component: MapView,
+      meta: { title: "Map" },
+    },
+    {
+      path: "/property",
+      name: "property",
+      component: PropertyView,
+      meta: { title: "Properties" },
+    },
+    {
+      path: "/detail/:id",
+      name: "Detail",
+      component: DetailView,
+      meta: { title: "Property-Detail" },
+    },
+    {
+      path: "/wishlist",
+      name: "Wishlist",
+      component: WishlistView,
+      meta: { title: "Wishlist" },
+    },
+    {
+      path: "/contact",
+      name: "Contact",
+      component: ContactUsView,
+      meta: { title: "Contact-Us" },
+    },
+    {
+      path: "/email",
+      name: "Email",
+      component: EmailView,
+      meta: { title: "Email" },
+    },
+    {
+      path: "/code",
+      name: "Code",
+      component: CodeView,
+      meta: { title: "Code" },
+    },
+    {
+      path: "/booking",
+      name: "Booking",
+      component: BookingView,
+      meta: { title: "Booking" },
+    },
   // Admin Dashboard
   {
-    path: "/dashboard/admin",
-    name: "Dashboard",
-    component: Dashboard,
-    meta: { title: "Dashboard" },
-  },
-  {
-    path: "/dashboard/admin/properties",
-    name: "AdminProperties",
-    component: DashboardPropertyView,
-    meta: { title: "Dashboard-Properties" },
-  },
-  {
-    path: "/dashboard/admin/users",
-    name: "Users",
-    component: UserView,
-    meta: { title: "Dashboard-Users" },
-  },
-  // Landlord Dashboard
-  {
-    path: "/dashboard/landlord",
-    name: "LandlordDashboard",
-    component: Dashboard,
-    meta: { title: "Dashboard-Landlord" },
-  },
-  {
-    path: "/dashboard/landlord/post",
-    name: "Post",
-    component: PostPropertyView,
-    meta: { title: "Properties" },
-  },
-  {
-    path: "/dashboard/landlord/properties",
-    name: "LandlordProperties",
-    component: DashboardPropertyView,
-    meta: { title: "Landlord-Property" },
+    path: "/dashboard",
+    component: DashboardLayout,
+    children: [
+      {
+        path: "",
+        name: "Dashboard",
+        component: Dashboard,
+        meta: { title: "Dashboard" },
+      },
+      {
+        path: "admin",
+        name: "Dashboard-admin",
+        meta: { title: "Dashboard" },
+        children: [
+          {
+            path: "",
+            name: "Dashboard-ad",
+            component: Dashboard,
+            meta: { title: "Dashboard" },
+          },
+          {
+            path: "properties",
+            name: "AdminProperties",
+            component: DashboardPropertyView,
+            meta: { title: "Dashboard-Properties" },
+          },
+          {
+            path: "users",
+            name: "Users",
+            component: UserView,
+            meta: { title: "Dashboard-Users" },
+          },
+        ],
+      },
+      {
+        path: "landlord",
+        name: "Landlord-Dashboard",
+        meta: { title: "Landlord-Dashbaord" },
+        children: [
+          {
+            path: "post",
+            name: "Post",
+            component: PostPropertyView,
+            meta: { title: "Properties" },
+          },
+          {
+            path: "properties",
+            name: "LandlordProperties",
+            component: DashboardPropertyView,
+            meta: { title: "Landlord-Property" },
+          },
+        ],
+      },
+    ],
   },
   // 404 Not Found
   {
@@ -158,7 +179,7 @@ const pageTitle = (title) => {
   document.title = title;
 };
 
-// Protection Routes 
+// Protection Routes
 router.beforeEach(async (to, from, next) => {
   const { user_id, role } = storeToRefs(useAuthStore());
   if (to.name === "404NotFound") {
@@ -176,10 +197,7 @@ router.beforeEach(async (to, from, next) => {
       next();
     }
   } else if (user_id.value) {
-    if (
-      (role.value == "customer" && to.path.includes("dashboard")) ||
-      (role.value == "landlord" && to.path.includes("admin"))
-    ) {
+    if (role.value == "customer" && to.path.includes("dashboard")) {
       pageTitle(to.meta.title);
       next({ name: "NotFound" });
     } else if (to.name === "Login" || to.name === "Register") {

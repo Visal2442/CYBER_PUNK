@@ -111,7 +111,6 @@
 
 <script>
 import TheTransition from "../widget/TheTransition.vue";
-import BaseButton from "../widget/BaseButton.vue";
 import axios from "axios";
 export default {
   data() {
@@ -159,7 +158,6 @@ export default {
   },
   components: {
     TheTransition,
-    BaseButton,
   },
 };
 </script>

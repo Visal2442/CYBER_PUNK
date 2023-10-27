@@ -1,7 +1,13 @@
 <template>
   <nav>
-    <v-navigation-drawer id="sidebar" v-model="drawer" class="pa-5">
-      <v-list-item>
+    <v-navigation-drawer
+      id="sidebar"
+      v-model="drawer"
+      class="pa-5"
+      disable-resize-watcher
+      :width="menubarWith"
+    >
+      <v-list-item @click="resizeSidebar(sidebarWidth)">
         <v-img
           :src="require('../../assets/logo-transparent.png')"
           class="mb-7 mt-2"
@@ -13,7 +19,7 @@
           prepend-icon="mdi-view-dashboard"
           title="Dashboard"
           router
-          :to="role == 'admin' ? '/dashboard/admin' : '/dashboard/landlord'"
+          to="/dashboard"
         ></v-list-item>
         <v-list-item
           v-if="role == 'landlord'"
@@ -42,12 +48,33 @@
   </nav>
 </template>
 
-<script setup>
-import { ref } from "vue";
-const drawer = ref(true);
-import Cookies from "js-cookie";
+<script>
+import { useAuthStore } from "@/store/AuthStore";
+import { mapState } from "pinia";
 
-const role = Cookies.get("role");
+export default {
+  data() {
+    return {
+      drawer: true,
+      sidebarWidth: 300,
+    };
+  },
+  methods: {
+    resizeSidebar(width) {
+      if (300 > width) {
+        this.sidebarWidth += 200;
+      } else {
+        this.sidebarWidth -= 200;
+      }
+    },
+  },
+  computed: {
+    ...mapState(useAuthStore, ["role"]),
+    menubarWith() {
+      return this.sidebarWidth;
+    },
+  },
+};
 </script>
 
 <style scoped>

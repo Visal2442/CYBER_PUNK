@@ -77,16 +77,8 @@
                 type="primary-btn"
                 block
                 class="ma-0 mb-5"
-                v-if="role == 'landlord'"
-                :to="{ name: 'LandlordDashboard' }"
-                >Dashboard</BaseButton
-              >
-              <BaseButton
-                type="primary-btn"
-                block
-                class="ma-0 mb-5"
-                v-if="role == 'admin'"
-                :to="{ name: 'Dashboard' }"
+                v-if="role == 'admin' || 'landlord'"
+                to="/dashboard"
                 >Dashboard</BaseButton
               >
               <BaseButton
@@ -126,7 +118,6 @@
 <script>
 import Cookies from "js-cookie";
 import axios from "axios";
-import BaseButton from "../widget/BaseButton.vue";
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "../../store/AuthStore";
 
@@ -197,7 +188,6 @@ export default {
     },
   },
   components: {
-    BaseButton,
   },
   created() {
     window.addEventListener("scroll", this.onScroll);

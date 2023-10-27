@@ -9,6 +9,7 @@ import mixins from "./mixins";
 import TheNavbar from "./components/partials/TheNavbar.vue";
 import TheDashboardHeader from "./components/partials/TheDashboardHeader.vue";
 import TheLoader from './components/common/TheLoader.vue'
+import BaseButton from "./components/widget/BaseButton.vue";
 
 
 // Pinia
@@ -27,6 +28,7 @@ app.mixin({ ...mixins });
 app.component("TheNavbar", TheNavbar),
 app.component("DashboardHeader", TheDashboardHeader),
 app.component("TheLoader", TheLoader),
+app.component("BaseButton", BaseButton),
 app.use(router);
 app.use(pinia);
 // app.use(vue3GoogleLogin, {

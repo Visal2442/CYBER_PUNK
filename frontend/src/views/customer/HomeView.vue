@@ -124,7 +124,6 @@
 </template>
 
 <script>
-import BaseButton from "../../components/widget/BaseButton.vue";
 import TheGraph from "../../components/graph/TheGraph.vue";
 import HouseCard from "@/components/card/HouseCard.vue";
 // Property store
@@ -141,7 +140,6 @@ export default {
     ]),
   },
   components: {
-    BaseButton,
     TheGraph,
     HouseCard,
   },

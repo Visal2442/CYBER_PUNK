@@ -268,7 +268,6 @@
 
 <script>
 import axios from "axios";
-import BaseButton from "@/components/widget/BaseButton.vue";
 import Cookies from "js-cookie";
 import { usePropertyStore } from "../../store/PropertyStore";
 import { useAuthStore } from "../../store/AuthStore";
@@ -360,7 +359,6 @@ export default {
     ...mapState(usePropertyStore, ["userProperties", "propertyCount"]),
   },
   components: {
-    BaseButton,
   },
   mounted() {
     this.getUsers();

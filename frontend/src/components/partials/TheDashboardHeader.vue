@@ -80,7 +80,6 @@
 
 <script>
 import axios from "axios";
-import BaseButton from "../widget/BaseButton.vue";
 // Pinia Store
 import { useAuthStore } from "../../store/AuthStore";
 import Cookies from "js-cookie";
@@ -126,7 +125,6 @@ export default {
     },
   },
   components: {
-    BaseButton,
   },
   computed: {
     ...mapState(useAuthStore, ["role"]),

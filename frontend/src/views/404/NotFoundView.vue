@@ -10,7 +10,6 @@
 </template>
 
 <script setup>
-import BaseButton from "@/components/widget/BaseButton.vue";
 </script>
 
 <style scoped>

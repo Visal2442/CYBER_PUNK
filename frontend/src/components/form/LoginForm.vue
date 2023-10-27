@@ -101,11 +101,10 @@ export default {
         email: this.email,
       };
       this.login(user);
-      if (this.role === "admin") {
-        this.$router.push("/dashboard/admin");
-      } else if (this.role === "landlord") {
-        this.$router.push("/dashboard/landlord");
-      } else {
+      if (this.role === "admin" || this.role==="landlord") {
+        this.$router.push({name: "Dashboard"});
+      } 
+      else {
         this.$router.push("/");
       }
     },

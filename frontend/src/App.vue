@@ -2,25 +2,14 @@
   <div>
     <!-- FOR CUSTOMER PAGE  -->
     <the-navbar v-if="!route.path.includes('dashboard') && !route.path.includes('not_found')"></the-navbar>
-    <!-- RESOURCE : https://www.youtube.com/watch?v=X4I6zUEM40A -->
-    <div v-if="!route.path.includes('dashboard')">
       <router-transition></router-transition>
-    </div>
+    <!-- RESOURCE : https://www.youtube.com/watch?v=X4I6zUEM40A -->
+      <!-- <router-view/> -->
     <the-footer v-if="!route.path.includes('dashboard') && !route.path.includes('not_found')"></the-footer>
-
-    <!-- FOR ADMIN PAGE  -->
-    <v-app v-if="route.path.includes('/dashboard/admin') || route.path.includes('/dashboard/landlord') ">
-      <dashboard-sidebar></dashboard-sidebar>
-      <v-main>
-        <dashboard-header></dashboard-header>
-        <router-transition></router-transition>
-      </v-main>
-    </v-app>
   </div>
 </template>
 
 <script setup>
-import DashboardSidebar from './components/partials/TheDashboardSidebar.vue';
 import TheFooter from './components/partials/TheFooter.vue';
 import RouterTransition from './components/widget/RouterTransition.vue'
 import { useRoute } from 'vue-router';

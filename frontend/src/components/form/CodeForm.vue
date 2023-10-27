@@ -47,22 +47,20 @@
             v-model="password"
             color="green-accent-4"
             label="Password"
-       
             :rules="[
               (v) => !!v || 'Password is required',
               (v) =>
                 (v && v.length >= 8) ||
                 'Password must be at least 8 characters long',
             ]"
-               :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              @click:append-inner="showPassword = !showPassword"
-              :type="showPassword ? 'text' : 'password'"
+            :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append-inner="showPassword = !showPassword"
+            :type="showPassword ? 'text' : 'password'"
           ></v-text-field>
           <v-text-field
             v-model="passwordConfirmation"
             label="Password Confirm"
             color="green-accent-4"
-          
             :rules="[
               (v) => !!v || 'Password confirmation is required',
               (v) => v === password || 'Passwords do not match',
@@ -70,9 +68,9 @@
                 (v && v.length >= 8) ||
                 'Password must be at least 8 characters long',
             ]"
-               :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append-inner="showPassword = !showPassword"
-          :type="showPassword ? 'text' : 'password'"
+            :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append-inner="showPassword = !showPassword"
+            :type="showPassword ? 'text' : 'password'"
           ></v-text-field>
           <v-btn
             v-if="verificationCode && passwordConfirmation && password"
@@ -95,15 +93,29 @@
   </v-container>
 </template>
 
-<script setup>
+<script>
 import TheTransition from "../widget/TheTransition.vue";
-import { storeToRefs } from "pinia";
 import { useAuthStore } from "../../store/AuthStore";
-const authStore = useAuthStore();
-
-const { verificationCode, password, passwordConfirmation, alert } =
-  storeToRefs(authStore);
-const { resetPassword } = authStore;
+import { mapState, mapActions } from "pinia";
+export default {
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState(useAuthStore, [
+      "verificationCode",
+      "password",
+      "passwordConfirmation",
+      "alert",
+    ]),
+  },
+  methods: {
+    ...mapActions(useAuthStore, ["resetPassword"]),
+  },
+  components: {
+    TheTransition,
+  },
+};
 </script>
 
 <style scpoed>

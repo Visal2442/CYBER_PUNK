@@ -152,7 +152,6 @@
 </template>
 
 <script setup>
-import BaseButton from '@/components/widget/BaseButton.vue';
 import TheTransition from '@/components/widget/TheTransition.vue';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';

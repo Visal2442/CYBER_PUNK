@@ -1,11 +1,27 @@
 <template>
   <div class="search-location d-flex flex-column align-center">
-    <v-text-field class=" w-100 position-relative" density="compact" variant="solo" label="Search District"
-      append-inner-icon="mdi-magnify" single-line hide-details v-model="searchText"></v-text-field>
+    <v-text-field
+      class="w-100 position-relative"
+      density="compact"
+      variant="solo"
+      label="Search District"
+      append-inner-icon="mdi-magnify"
+      single-line
+      hide-details
+      v-model="searchText"
+    ></v-text-field>
     <div class="w-100">
-      <ul class="result position-absolute w-100" density="compact" elevation="4">
+      <ul
+        class="result position-absolute w-100"
+        density="compact"
+        elevation="4"
+      >
         <div v-for="district in districts" :key="district.id">
-          <li class="district pa-3" v-if="!isNotFound" @click="onClick(district)">
+          <li
+            class="district pa-3"
+            v-if="!isNotFound"
+            @click="onClick(district)"
+          >
             <v-icon icon="mdi mdi-magnify" class="mr-4"></v-icon>
             {{ district.name }}
           </li>
@@ -16,39 +32,44 @@
   </div>
 </template>
 
-<script setup>
-import { ref, watch, defineEmits } from "vue";
+<script>
 import axios from "axios";
 
-const emit = defineEmits(['onSearch', 'onInput']);
-const searchText = ref(null);
-const districts = ref([]);
-const isClicked = ref(false)
-const isNotFound = ref(false)
-
-watch (searchText, async (newValue) => {
-  emit('onInput', newValue);
-  if (newValue != '' && !isClicked.value) {
-    try{
-      const response = await axios.get(`/properties/location/${newValue}`);
-      isNotFound.value = false;
-      districts.value = response.data.data;
-    }
-    catch (err){
-      isNotFound.value = true;
-      districts.value = err.response.data;
-    }
-  }
-  else {
-    isClicked.value = false;
-    districts.value = [];
-  }
-});
-const onClick = (district) => {
-  searchText.value = district.name;
-  isClicked.value = true;
-  emit('onSearch', district.id);
-}
+export default {
+  data() {
+    return {
+      searchText: null,
+      districts: [],
+      isClicked: false,
+      isNotFound: false,
+    };
+  },
+  methods: {
+    onClick(district) {
+      this.searchText = district.name;
+      this.isClicked = true;
+      this.$emit("onSearch", district.id);
+    },
+  },
+  watch: {
+    async searchText(newValue) {
+      this.$emit("onInput", newValue);
+      if (newValue != "" && !this.isClicked) {
+        try {
+          const response = await axios.get(`/properties/location/${newValue}`);
+          this.isNotFound = false;
+          this.districts = response.data.data;
+        } catch (err) {
+          this.isNotFound = true;
+          this.districts = err.response.data;
+        }
+      } else {
+        this.isClicked = false;
+        this.districts = [];
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>

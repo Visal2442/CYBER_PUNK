@@ -97,7 +97,6 @@
 </template>
 
 <script>
-import BaseButton from "../widget/BaseButton.vue";
 import TheTransition from "../widget/TheTransition.vue";
 import { useBookingStore } from "../../store/BookingStore";
 import { mapActions } from "pinia";
@@ -161,7 +160,6 @@ export default {
     },
   },
   components: {
-    BaseButton,
     TheTransition,
   },
 };

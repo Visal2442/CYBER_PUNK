@@ -66,7 +66,6 @@
 
 <script>
 import axios from "axios";
-import BaseButton from "../widget/BaseButton.vue";
 export default {
   props: ["property"],
   data() {
@@ -103,7 +102,6 @@ export default {
     },
   },
   components: {
-    BaseButton,
   },
   mounted() {
     this.fetchPropertyRating();
