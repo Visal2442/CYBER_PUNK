@@ -18,7 +18,7 @@ http.interceptors.request.use((cf) => {
   return config;
 });
 http.interceptors.response.use((response) => {
-  return response.data.data;
+  return response.data; 
 });
 
 export default http;

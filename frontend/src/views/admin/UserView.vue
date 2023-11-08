@@ -218,7 +218,7 @@ export default {
     },
     editUser() {
       const id = localStorage.getItem("userId");
-      if (this.userName !== "" && this.email !== "" && this.selected !== "") {
+      if (this.userName && this.email !== "" && this.selected !== "") {
         const userData = {
           username: this.userName,
           email: this.email,
@@ -233,12 +233,11 @@ export default {
     },
     async displayUsers() {
       let url = "/users";
-      if (this.searchText != "") {
+      if (this.searchText) {
         this.url = url + "?name=" + this.searchText;
       }
       await http.get(url).then((response) => {
-        this.users = response.data.data;
-        console.log(this.users);
+        this.users = response.data;
       });
     },
     searchUser(text) {

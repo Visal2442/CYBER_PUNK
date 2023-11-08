@@ -57,6 +57,7 @@ export default {
     return {
       drawer: true,
       sidebarWidth: 300,
+      rail:false
     };
   },
   methods: {

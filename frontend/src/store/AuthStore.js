@@ -1,6 +1,15 @@
 import { defineStore } from "pinia";
 import Cookies from "js-cookie";
-import http from '@/axios-http.js'
+import {
+  register,
+  login,
+  logout,
+  fetchLandlords,
+  fetchCustomers,
+  fetchUsers,
+  sendEmail,
+  resetPassword,
+} from "@/api/auth";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -11,7 +20,6 @@ export const useAuthStore = defineStore("auth", {
     profile: "",
     user_id: localStorage.getItem("user_id"),
     role: Cookies.get("role"),
-
     verificationCode: "",
     password: "",
     passwordConfirmation: "",
@@ -43,87 +51,47 @@ export const useAuthStore = defineStore("auth", {
       this.profile = null;
       this.role = null;
     },
-    // Register
     async register(user) {
-      await http
-        .post("/register", user)
-        .then((res) => {
-          this.setUserData(
-            res.data.user.username,
-            res.data.user.image,
-            res.data.user.role,
-            user.email,
-            res.data.user.id,
-            res.data.token
-          );
-          this.role = res.data.user.role;
-          this.user_id = res.data.user.id;
-          this.token = res.data.token;
-          this.profile = res.data.user.image;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const authData = await register(user);
+      this.setUserData(
+        authData.user.username,
+        authData.user.image,
+        authData.user.role,
+        user.email,
+        authData.user.id,
+        authData.token
+      );
+      this.role = authData.user.role;
+      this.user_id = authData.user.id;
+      this.token = authData.token;
+      this.profile = authData.user.image;
     },
-
-    // Login
     async login(user) {
-      await http
-        .post("/login", user)
-        .then((res) => {
-          this.setUserData(
-            res.data.user.username,
-            res.data.user.image,
-            res.data.user.role,
-            user.email,
-            res.data.user.id,
-            res.data.token
-          );
-          this.role = res.data.user.role;
-          this.user_id = res.data.user.id;
-          this.token = res.data.token;
-          this.profile = res.data.user.image;
-        })
-        .catch((err) => {
-          this.errors = err.response.data.message;
-        });
+      const authData = await login(user);
+      this.setUserData(
+        authData.user.username,
+        authData.user.image,
+        authData.user.role,
+        user.email,
+        authData.user.id,
+        authData.token
+      );
+      this.role = authData.user.role;
+      this.user_id = authData.user.id;
+      this.token = authData.token;
+      this.profile = authData.user.image;
     },
-
-    // Log out
     async logout() {
-      await http
-        .post("/logout", null, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-        .then(() => {
-          this.resetUserData();
-        })
-        .catch((err) => {
-          this.errors = err.response.data.errors;
-        });
+      await logout();
+      this.resetUserData();
     },
-
     async sendEmail() {
-      await http
-        .post("/reset_password_request", { email: this.emailSend })
-        .then((res) => {
-          console.log(res);
-          localStorage.setItem("email", this.emailSend);
-          setTimeout(() => {
-            alert.value = true;
-            setTimeout(() => {
-              alert.value = false;
-            }, 3000);
-          }, 1000);
-          // this.router.push({name:'Code'});
-        })
-        .catch((error) => {
-          this.message = error.response.data.message;
-        });
+      await sendEmail({ email: this.emailSend });
+      this.alert = true;
+      setTimeout(() => {
+        this.alert = false;
+      }, 3000);
     },
-
     async resetPassword() {
       const data = {
         verification_code: this.verificationCode,
@@ -131,49 +99,21 @@ export const useAuthStore = defineStore("auth", {
         password_confirmation: this.passwordConfirmation,
       };
       this.emailLocalStorage = localStorage.getItem("email");
-      await http
-        .post("/reset_password", data)
-        .then((response) => {
-          console.log(response.data);
-          let user = {
-            email: this.emailLocalStorage,
-            password: this.password,
-          };
-          this.login(user);
-        })
-        .catch((error) => {
-          console.error(error.response.data);
-        });
+      await resetPassword(data);
+      const user = {
+        email: this.emailLocalStorage,
+        password: this.password,
+      };
+      await this.login(user);
     },
     async getUsers() {
-      await http
-        .get(`/users`)
-        .then((res) => {
-          this.allUsers = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.allUsers = await fetchUsers();
     },
     async getCustomers() {
-      await http
-        .get(`/customers`)
-        .then((res) => {
-          this.allCustomers = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.allCustomers = await fetchCustomers();
     },
     async getLandlords() {
-      await http
-        .get(`/landlords`)
-        .then((res) => {
-          this.allLandlords = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.allLandlords = await fetchLandlords();
     },
   },
   getters: {

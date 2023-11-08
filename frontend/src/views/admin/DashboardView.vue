@@ -307,8 +307,8 @@ export default {
       http
         .get(`/numberOfBooking/`, { params: { user_id: id } })
         .then((res) => {
-          this.booking = res.data.data.length;
-          for (let item of res.data.data) {
+          this.booking = res.data.length;
+          for (let item of res.data) {
             this.price += item["price"];
           }
         });
