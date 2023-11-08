@@ -176,7 +176,7 @@
   </v-container>
 </template>
 <script>
-import axios from "axios";
+import http from "@/axios-http";
 // RESOURCE: https://vue2-leaflet.netlify.app/components/LPopup.html#demo
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LMarker, LIcon } from "@vue-leaflet/vue-leaflet";
@@ -221,7 +221,7 @@ export default {
       const file = event.target.files[0];
       const form = new FormData();
       form.append("propertyImage", file);
-      axios.post("/image", form).then((response) => {
+      http.post("/image", form).then((response) => {
         this.propertyImage = response.data;
       });
     },
@@ -242,7 +242,7 @@ export default {
         district_id: this.selected,
         user_id: this.userId,
       };
-      axios
+      http
         .post("/createProperty", property)
         .then((response) => {
           console.log(response);
@@ -266,7 +266,7 @@ export default {
       this.selected = "";
     },
     async fetchDistricts() {
-      axios.get("/districts").then((res) => {
+      http.get("/districts").then((res) => {
         this.districts = res.data.data;
       });
     },

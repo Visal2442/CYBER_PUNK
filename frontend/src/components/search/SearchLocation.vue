@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import http from "@/axios-http";
 
 export default {
   data() {
@@ -56,7 +56,7 @@ export default {
       this.$emit("onInput", newValue);
       if (newValue != "" && !this.isClicked) {
         try {
-          const response = await axios.get(`/properties/location/${newValue}`);
+          const response = await http.get(`/properties/location/${newValue}`);
           this.isNotFound = false;
           this.districts = response.data.data;
         } catch (err) {

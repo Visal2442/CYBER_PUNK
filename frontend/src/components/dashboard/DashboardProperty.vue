@@ -79,147 +79,13 @@
     </v-container>
 
     <!-- Edit dialog  -->
-    <!-- <v-dialog v-model="dialog">
-      <v-card>
-        <v-sheet class="m-10 w-100 bg-white pa-8" elevation="4">
-          <v-card-title
-            align="center"
-            class="text-green text-h4 mb-5 font-weight-bold"
-            >EDIT PROPERTY</v-card-title
-          >
-          <v-form fast-fail x="d-flex flex-column">
-            <div class="d-flex">
-              <v-text-field
-                type="text"
-                clearable
-                color="green-accent-4"
-                label="House Name"
-                class="mr-5"
-                placeholder="House Name"
-                variant="outlined"
-                v-model="houseName"
-              ></v-text-field>
-              <v-text-field
-                type="text"
-                clearable
-                color="green-accent-4"
-                label="Size"
-                name="size"
-                placeholder="Size"
-                variant="outlined"
-                v-model="size"
-              ></v-text-field>
-            </div>
-            <div class="d-flex">
-              <v-text-field
-                type="number"
-                clearable
-                color="green-accent-4"
-                label="Price Per Month"
-                class="mr-5"
-                placeholder="Price Per Month"
-                variant="outlined"
-                v-model="pricePerMonth"
-              ></v-text-field>
-              <v-file-input
-                label="Choose an image"
-                id="image-file-input"
-                name="image"
-                variant="outlined"
-                clearable
-                color="green-accent-4"
-                accept="image/*"
-                placeholder="Image"
-                v-on:change="getImage"
-              ></v-file-input>
-            </div>
-            <div class="d-flex">
-              <v-text-field
-                type="number"
-                clearable
-                color="green-accent-4"
-                label="Floor"
-                class="mr-5"
-                name="floor"
-                placeholder="Floor"
-                variant="outlined"
-                v-model="floor"
-              ></v-text-field>
-              <v-text-field
-                type="number"
-                clearable
-                color="green-accent-4"
-                label="Number Of Room"
-                class="mr-5"
-                name="room"
-                placeholder="Number Of Room"
-                variant="outlined"
-                v-model="numberOfRooms"
-              ></v-text-field>
-              <v-text-field
-                type="number"
-                clearable
-                color="green-accent-4"
-                label="Number Of Kitchen"
-                class="mr-5"
-                name="kitchen"
-                placeholder="Number Of Kitchen"
-                variant="outlined"
-                v-model="numberOfKitchens"
-              ></v-text-field>
-              <v-text-field
-                type="number"
-                clearable
-                color="green-accent-4"
-                label="Number Of Bathroom"
-                name="bathroom"
-                placeholder="Number Of Bathroom"
-                variant="outlined"
-                v-model="numberOfBathrooms"
-              ></v-text-field>
-            </div>
-            <div class="d-flex">
-              <v-select
-                v-model="selected"
-                placeholder="Number Of Kitchen"
-                label="Select District"
-                :items="districts"
-                density="compact"
-                color="green-accent-4"
-                variant="outlined"
-              ></v-select>
-            </div>
-            <div class="d-flex">
-              <v-textarea
-                clearable
-                label="Description"
-                placeholder="Discription"
-                color="green-accent-4"
-                variant="outlined"
-                v-model="description"
-              ></v-textarea>
-            </div>
-            <v-card-actions class="button">
-              <v-btn
-                class="cancel text-red"
-                color="black"
-                text
-                @click="dialog = !dialog"
-                >Cancel</v-btn
-              >
-              <v-btn
-                class="save bg-green-accent-3 text-white"
-                color="black"
-                text
-                @click="saveChanges()"
-                >Update</v-btn
-              >
-            </v-card-actions>
-          </v-form>
-        </v-sheet>
-      </v-card>
-    </v-dialog> -->
-
+    <edit-dialog
+      v-if="showEditDialog"
+      :showEditDialog="showEditDialog"
+      @closeEditDialog="closeEditDialog"
+      @saveChanges="saveChanges"
+      :property="property"
+    ></edit-dialog>
     <!-- Delete dialog  -->
     <v-dialog v-model="deleteDialog" width="25%">
       <v-card>
@@ -253,30 +119,33 @@
 </template>
 
 <script>
-import axios from "axios";
+import http from "@/axios-http";
 import Cookies from "js-cookie";
 // Property Store
 import { usePropertyStore } from "../../store/PropertyStore";
 import { mapActions } from "pinia";
 import TheLoader from "../common/TheLoader.vue";
+import EditDialog from "../dialog/EditDialog.vue";
 export default {
   props: ["properties"],
   data() {
     return {
       role: Cookies.get("role"),
-      // dialog: false,
+      showEditDialog: false,
       deleteDialog: false,
-      houseName: "",
-      size: "",
-      pricePerMonth: 0,
-      image: "",
-      floor: 0,
-      numberOfRooms: 0,
-      numberOfKitchens: 0,
-      numberOfBathrooms: 0,
-      selected: "",
-      description: "",
-      propertyImage: "",
+      property: {
+        houseName: "",
+        size: "",
+        pricePerMonth: 0,
+        image: "",
+        floor: 0,
+        numberOfRooms: 0,
+        numberOfKitchens: 0,
+        numberOfBathrooms: 0,
+        selected: "",
+        description: "",
+        propertyImage: "",
+      },
       districts: [],
       isLoading: true,
     };
@@ -286,63 +155,57 @@ export default {
       "deletePropertyById",
       "updatePropertyById",
     ]),
-    getImage(event) {
-      const file = event.target.files[0];
-      const form = new FormData();
-      form.append("propertyImage", file);
-      axios.post("/image", form).then((response) => {
-        this.propertyImage = response.data;
-      });
-    },
     // Edit property
     editProperty(propertyId) {
       localStorage.setItem("property_id", propertyId);
-      axios.get(`/properties/detail/${propertyId}`).then((response) => {
+      http.get(`/properties/detail/${propertyId}`).then((response) => {
         const property = response.data.data;
         if (property.type == "house") {
-          this.houseName = property.name;
-          this.size = property.size;
-          this.pricePerMonth = property.price;
-          this.image = property.image;
-          this.floor = property.number_of_floor;
-          this.numberOfBathrooms = property.number_of_bathroom;
-          this.numberOfKitchens = property.number_of_kitchen;
-          this.numberOfRooms = property.number_of_room;
-          this.description = property.description;
-          this.selected = this.property.district;
+          this.property.houseName = property.name;
+          this.property.size = property.size;
+          this.property.pricePerMonth = property.price;
+          this.property.image = property.image;
+          this.property.floor = property.number_of_floor;
+          this.property.numberOfBathrooms = property.number_of_bathroom;
+          this.property.numberOfKitchens = property.number_of_kitchen;
+          this.property.numberOfRooms = property.number_of_room;
+          this.property.description = property.description;
+          this.property.selected = this.property.district;
         } else {
-          this.houseName = property[0]["name"];
-          this.size = property[0]["size"];
-          this.pricePerMonth = property[0]["price"];
-          this.image = property[0]["image"];
-          this.floor = property[0]["number_of_floor"];
-          this.numberOfBathrooms = property[0]["number_of_bathroom"];
-          this.numberOfKitchens = property[0]["number_of_kitchen"];
-          this.numberOfRooms = property[0]["number_of_room"];
-          this.description = property[0]["description"];
-          this.selected = property[0]["district"]["value"];
+          this.property.houseName = property[0]["name"];
+          this.property.size = property[0]["size"];
+          this.property.pricePerMonth = property[0]["price"];
+          this.property.image = property[0]["image"];
+          this.property.floor = property[0]["number_of_floor"];
+          this.property.numberOfBathrooms = property[0]["number_of_bathroom"];
+          this.property.numberOfKitchens = property[0]["number_of_kitchen"];
+          this.property.numberOfRooms = property[0]["number_of_room"];
+          this.property.description = property[0]["description"];
+          this.property.selected = property[0]["district"]["value"];
         }
       });
       localStorage.setItem("property_id", propertyId);
-      this.dialog = true;
+      this.showEditDialog = true;
     },
-    saveChanges() {
+    closeEditDialog(val) {
+      this.showEditDialog = val;
+    },
+    saveChanges(propertyObj) {
       let propertyId = localStorage.getItem("property_id");
       const data = {
-        name: this.houseName,
-        size: this.size,
-        price: this.pricePerMonth,
-        image: this.propertyImage,
-        number_of_floor: this.floor,
-        number_of_room: this.numberOfRooms,
-        number_of_kitchen: this.numberOfKitchens,
-        number_of_bathroom: this.numberOfBathrooms,
-        description: this.description,
-        district_id: this.selected,
+        name: propertyObj.houseName,
+        size: propertyObj.size,
+        price: propertyObj.pricePerMonth,
+        image: propertyObj.propertyImage,
+        number_of_floor: propertyObj.floor,
+        number_of_room: propertyObj.numberOfRooms,
+        number_of_kitchen: propertyObj.numberOfKitchens,
+        number_of_bathroom: propertyObj.numberOfBathrooms,
+        description: propertyObj.description,
+        district_id: propertyObj.selected,
       };
       this.updatePropertyById(propertyId, data);
       this.$emit("modify");
-      this.dialog = false;
     },
     // Delete Property
     dialogDeleteProperty(propertyId) {
@@ -356,7 +219,7 @@ export default {
       this.deleteDialoge = false;
     },
     async fetchDistricts() {
-      await axios.get("/districts").then((res) => {
+      await http.get("/districts").then((res) => {
         this.districts = res.data.data;
       });
     },
@@ -365,7 +228,7 @@ export default {
     await this.fetchDistricts();
     this.isLoading = false;
   },
-  components: { TheLoader },
+  components: { TheLoader, EditDialog },
 };
 </script>
 

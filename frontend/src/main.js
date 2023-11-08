@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
-import "./axios-http";
 import mixins from "./mixins";
 
 import TheNavbar from "./components/partials/TheNavbar.vue";

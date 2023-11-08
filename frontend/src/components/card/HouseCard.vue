@@ -102,9 +102,9 @@
 import { defineProps, defineEmits, ref, onMounted, watch } from "vue";
 import Cookies from "js-cookie";
 import { useRouter } from "vue-router";
-const router = useRouter();
-import axios from "axios";
+import http from "@/axios-http";
 
+const router = useRouter();
 // Wishlist Store
 import { useWishlistStore } from "../../store/WishlistStore";
 const wishlistStore = useWishlistStore();
@@ -176,11 +176,11 @@ watch(avgRating, (newValue) => {
 });
 
 const getAvgRating = () => {
-  axios
+  http
     .get(`/properties/ratings/${props.property.id}`)
     .then((response) => {
       avgRating.value = 0;
-      const ratings = response.data.data;
+      const ratings = response.data;
       numberOfRating.value = ratings.length;
       const sum = ratings.reduce((star, ratings) => star + ratings.star, 0);
       const avg = sum / ratings.length;
@@ -189,7 +189,7 @@ const getAvgRating = () => {
       }
     })
     .catch((error) => {
-      console.log(error.response.data);
+      console.log(error);
     });
 };
 

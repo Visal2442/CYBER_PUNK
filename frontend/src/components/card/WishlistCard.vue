@@ -65,7 +65,8 @@
 </template>
 
 <script>
-import axios from "axios";
+import http from '@/axios-http';
+
 export default {
   props: ["property"],
   data() {
@@ -83,7 +84,7 @@ export default {
       this.$router.push(`/detail/${property_id}`);
     },
     fetchPropertyRating() {
-      axios
+      http
         .get(`/properties/ratings/${this.property.property.id}`)
         .then((response) => {
           this.avgRating = 0;

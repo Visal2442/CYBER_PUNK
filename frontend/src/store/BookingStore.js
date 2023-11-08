@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+import http from "@/axios-http";
 
 export const useBookingStore = defineStore("booking", {
   state: () => {
@@ -9,7 +9,7 @@ export const useBookingStore = defineStore("booking", {
   },
   actions: {
     async booking(booking) {
-      await axios
+      await http
         .post("/booking", booking)
         .then(() => {})
         .catch((err) => {

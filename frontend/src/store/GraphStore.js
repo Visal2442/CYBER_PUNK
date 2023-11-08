@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from 'vue';
-import axios from 'axios';
+import http from "@/axios-http";
 
 export const useGraphStore = defineStore('graph', () => {
   const url=ref('/getDataGrap');
@@ -13,7 +13,7 @@ export const useGraphStore = defineStore('graph', () => {
         }],
       });
 
-      axios.get(url.value).then((response) =>{
+      http.get(url.value).then((response) =>{
           const data = response.data.data;
           if (data) {
             const labels = [];

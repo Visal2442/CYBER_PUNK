@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import http from "@/axios-http";
 // Pinia Store
 import { useAuthStore } from "../../store/AuthStore";
 import Cookies from "js-cookie";
@@ -101,7 +101,7 @@ export default {
       var file = event.target.files[0];
       var form = new FormData();
       form.append("profile", file);
-      axios.post("/imageProfile", form).then((response) => {
+      http.post("/imageProfile", form).then((response) => {
         this.profile = response.data;
         this.update();
       });
@@ -112,7 +112,7 @@ export default {
         id: id,
         image: this.profile,
       };
-      axios.post(`/editProfile`, picture).then((response) => {
+      http.post(`/editProfile`, picture).then((response) => {
         console.log(response);
       });
       Cookies.set("image", this.profile);

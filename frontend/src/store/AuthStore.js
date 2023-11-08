@@ -1,8 +1,6 @@
 import { defineStore } from "pinia";
-// import { ref } from 'vue';
-// import { useRouter } from "vue-router";
 import Cookies from "js-cookie";
-import axios from "axios";
+import http from '@/axios-http.js'
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -47,7 +45,7 @@ export const useAuthStore = defineStore("auth", {
     },
     // Register
     async register(user) {
-      await axios
+      await http
         .post("/register", user)
         .then((res) => {
           this.setUserData(
@@ -70,7 +68,7 @@ export const useAuthStore = defineStore("auth", {
 
     // Login
     async login(user) {
-      await axios
+      await http
         .post("/login", user)
         .then((res) => {
           this.setUserData(
@@ -93,7 +91,7 @@ export const useAuthStore = defineStore("auth", {
 
     // Log out
     async logout() {
-      await axios
+      await http
         .post("/logout", null, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -108,7 +106,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async sendEmail() {
-      await axios
+      await http
         .post("/reset_password_request", { email: this.emailSend })
         .then((res) => {
           console.log(res);
@@ -133,7 +131,7 @@ export const useAuthStore = defineStore("auth", {
         password_confirmation: this.passwordConfirmation,
       };
       this.emailLocalStorage = localStorage.getItem("email");
-      await axios
+      await http
         .post("/reset_password", data)
         .then((response) => {
           console.log(response.data);
@@ -148,7 +146,7 @@ export const useAuthStore = defineStore("auth", {
         });
     },
     async getUsers() {
-      await axios
+      await http
         .get(`/users`)
         .then((res) => {
           this.allUsers = res.data.data;
@@ -158,7 +156,7 @@ export const useAuthStore = defineStore("auth", {
         });
     },
     async getCustomers() {
-      await axios
+      await http
         .get(`/customers`)
         .then((res) => {
           this.allCustomers = res.data;
@@ -168,7 +166,7 @@ export const useAuthStore = defineStore("auth", {
         });
     },
     async getLandlords() {
-      await axios
+      await http
         .get(`/landlords`)
         .then((res) => {
           this.allLandlords = res.data.data;

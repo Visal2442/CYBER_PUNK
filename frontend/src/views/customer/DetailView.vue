@@ -166,7 +166,7 @@ const isAlert = ref(false);
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LMarker, LPopup, LIcon } from "@vue-leaflet/vue-leaflet";
 import HomeIcon from '../../assets/marker/homeIcon.png'
-import axios from 'axios';
+import http from '@/axios-http';
 import Cookies from 'js-cookie';
 // Map Configuration 
 const zoom = 12;
@@ -225,7 +225,7 @@ function calculateDistance(lat1, lat2, lon1, lon2) {
 // Fetch data from database
 const property = ref(null);
 const rooms = ref([]);
-axios.get(`/properties/detail/${route.params.id}`).then((res) => {
+http.get(`/properties/detail/${route.params.id}`).then((res) => {
   if (res.data.data.length > 1) {
     rooms.value = res.data.data[1];
     property.value = res.data.data[0];

@@ -117,7 +117,7 @@
 
 <script>
 import Cookies from "js-cookie";
-import axios from "axios";
+import http from "@/axios-http";
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "../../store/AuthStore";
 
@@ -149,7 +149,7 @@ export default {
       console.log(file);
       var form = new FormData();
       form.append("profile", file);
-      axios.post("/imageProfile", form).then((response) => {
+      http.post("/imageProfile", form).then((response) => {
         this.profile = response.data;
         this.update();
       });
@@ -160,7 +160,7 @@ export default {
         id: id,
         image: this.profile,
       };
-      axios.post(`/editProfile`, picture).then((response) => {
+      http.post(`/editProfile`, picture).then((response) => {
         console.log(response);
       });
       Cookies.set("image", this.profile);

@@ -267,7 +267,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import http from "@/axios-http";
 import Cookies from "js-cookie";
 import { usePropertyStore } from "../../store/PropertyStore";
 import { useAuthStore } from "../../store/AuthStore";
@@ -294,7 +294,7 @@ export default {
     ...mapActions(useAuthStore, ["getUsers", "getLandlords", "getCustomers"]),
     getData(user_id) {
       localStorage.setItem("userId", user_id);
-      axios.get(`/userId/${user_id}`).then((res) => {
+      http.get(`/userId/${user_id}`).then((res) => {
         console.log(res.data.data);
         this.userName = res.data.data.username;
         this.email = res.data.data.email;
@@ -304,7 +304,7 @@ export default {
     },
     getNumberOfBooking() {
       const id = localStorage.getItem("user_id");
-      axios
+      http
         .get(`/numberOfBooking/`, { params: { user_id: id } })
         .then((res) => {
           this.booking = res.data.data.length;
@@ -321,7 +321,7 @@ export default {
           email: this.email,
           role: this.selected,
         };
-        axios.put(`/updateUser/${id}`, userData).then(() => {
+        http.put(`/updateUser/${id}`, userData).then(() => {
           this.dialog = false;
           this.displayUsers();
         });
@@ -338,7 +338,7 @@ export default {
     },
     deleteUserAccount() {
       let id = localStorage.getItem("userId");
-      axios
+      http
         .delete(`/delete_user/${id}`)
         .then(() => {
           this.displayUsers();

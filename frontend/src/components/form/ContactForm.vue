@@ -111,7 +111,8 @@
 
 <script>
 import TheTransition from "../widget/TheTransition.vue";
-import axios from "axios";
+import http from "@/axios-http";
+
 export default {
   data() {
     return {
@@ -139,7 +140,7 @@ export default {
         message_request: this.message,
       };
       this.loading = true;
-      await axios
+      await http
         .post("/requestLandlord", user)
         .then((response) => {
           console.log(response.data);

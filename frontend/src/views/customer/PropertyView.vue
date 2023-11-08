@@ -81,7 +81,8 @@ import FilterType from "@/components/search/FilterType.vue";
 import FilterByPrice from "@/components/search/FilterPrice.vue";
 import TheTransition from "../../components/widget/TheTransition.vue";
 import HouseCard from "@/components/card/HouseCard.vue";
-import axios from "axios";
+import http from "@/axios-http";
+
 export default {
   data() {
     return {
@@ -117,11 +118,11 @@ export default {
         url = url + "&min=" + this.price.min + "&max=" + this.price.max;
       }
       try {
-        const response = await Promise.all([axios.get(url)]);
-        console.log(response[0].data);
+        const response = await Promise.all([http.get(url)]);
+        console.log(response[0].data.data);
         this.emoji = response[0].data.emoji;
-        this.properties = response[0].data.data.data;
-        this.pagination.total = response[0].data.data.last_page;
+        this.properties = response[0].data.data;
+        this.pagination.total = response[0].data.last_page;
         this.isFound = true;
       } catch (err) {
         this.notFoundMessage = err.response.data.message;
@@ -163,7 +164,7 @@ export default {
     },
     // Rating Star
     async rateStar(property) {
-      await axios
+      await http
         .post("/properties/ratings", property)
         .then(() => {})
         .catch((err) => err);

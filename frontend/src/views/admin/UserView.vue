@@ -185,7 +185,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import http from "@/axios-http";
 export default {
   data() {
     return {
@@ -208,7 +208,7 @@ export default {
   methods: {
     getData(user_id) {
       localStorage.setItem("userId", user_id);
-      axios.get(`/userId/${user_id}`).then((res) => {
+      http.get(`/userId/${user_id}`).then((res) => {
         console.log(res.data.data);
         this.userName = res.data.data.username;
         this.email = res.data.data.email;
@@ -224,7 +224,7 @@ export default {
           email: this.email,
           role: this.selected,
         };
-        axios.put(`/updateUser/${id}`, userData).then((res) => {
+        http.put(`/updateUser/${id}`, userData).then((res) => {
           console.log(res.data);
           this.dialog = false;
           this.displayUsers();
@@ -236,7 +236,7 @@ export default {
       if (this.searchText != "") {
         this.url = url + "?name=" + this.searchText;
       }
-      await axios.get(url).then((response) => {
+      await http.get(url).then((response) => {
         this.users = response.data.data;
         console.log(this.users);
       });
@@ -262,7 +262,7 @@ export default {
     },
     deleteUserAccount() {
       let id = localStorage.getItem("userId");
-      axios
+      http
         .delete(`/delete_user/${id}`)
         .then(() => {
           this.displayUsers();

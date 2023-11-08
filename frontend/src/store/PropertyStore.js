@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+import http from "@/axios-http";
+import { fetchProperties } from "@/api/property";
 
 export const usePropertyStore = defineStore("property", {
   state: () => ({
@@ -11,18 +12,11 @@ export const usePropertyStore = defineStore("property", {
   actions: {
     // Get all properties
     async getAllProperties() {
-      await axios
-        .get("/properties")
-        .then((res) => {
-          this.properties = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.properties = await fetchProperties()
     },
     // Get 12 properties per page
     async getPropertiesPerPage() {
-      await axios
+      await http
         .get("/properties/pagination")
         .then((res) => {
           this.propertiesPerpage = res.data;
@@ -33,7 +27,7 @@ export const usePropertyStore = defineStore("property", {
     },
     // Get properties by user id
     async getPropertiesByUserId() {
-      await axios
+      await http
         .get(`/getAllProperties/${this.userId}`)
         .then((res) => {
           this.userProperties = res.data.data;
@@ -42,7 +36,7 @@ export const usePropertyStore = defineStore("property", {
     },
     // Delete property by id
     async deletePropertyById(propertyId) {
-      await axios
+      await http
         .delete(`/properties/delete/${propertyId}`)
         .then(() => {
           this.getPropertiesByUserId();
@@ -54,7 +48,7 @@ export const usePropertyStore = defineStore("property", {
     },
     // Update property by id
     async updatePropertyById(propertyId, data) {
-      await axios
+      await http
         .put(`/updateProperty/${propertyId}`, data)
         .then(() => {
           this.getPropertiesByUserId();

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+import http from "@/axios-http";
 
 export const useWishlistStore = defineStore("wishlist", {
   state() {
@@ -12,7 +12,7 @@ export const useWishlistStore = defineStore("wishlist", {
   },
   actions: {
     async getAllData() {
-      await axios
+      await http
         .get(`/wishlist/${this.user_id}`)
         .then((res) => {
           this.getWishlist = res.data.data;
@@ -30,7 +30,7 @@ export const useWishlistStore = defineStore("wishlist", {
         user_id: this.user_id,
         property_id: property_id,
       };
-      await axios
+      await http
         .post("/wishlist", this.data_wish_list)
         .then(() => {
           this.getAllData();
@@ -40,7 +40,7 @@ export const useWishlistStore = defineStore("wishlist", {
         });
     },
     async removeWishlist(wishtList_id) {
-      await axios
+      await http
         .delete(`/wishlist/${wishtList_id}`)
         .then((res) => {
           this.getAllData();
